@@ -88,15 +88,15 @@ class Electron:
 
 @dataclass(frozen=True, init=False)
 class Sampling:
-    shape: NDArray[numpy.int_]
+    shape: NDArray[numpy.int64]
     """Sampling shape (n_y, n_x)"""
-    extent: NDArray[numpy.float_]
+    extent: NDArray[numpy.float64]
     """Sampling extent (b, a)"""
-    sampling: NDArray[numpy.float_]
+    sampling: NDArray[numpy.float64]
     """Sample spacing (s_y, s_x)"""
 
     @property
-    def k_max(self) -> NDArray[numpy.float_]:
+    def k_max(self) -> NDArray[numpy.float64]:
         """
         Return maximum frequency (radius) of reciprocal space (1/(2s_y), 1/(2s_x))
         """
@@ -121,32 +121,32 @@ class Sampling:
                  extent: t.Optional[ArrayLike] = None,
                  sampling: t.Optional[ArrayLike] = None):
         try:
-            object.__setattr__(self, 'shape', numpy.broadcast_to(shape, (2,)).astype(numpy.int_))
+            object.__setattr__(self, 'shape', numpy.broadcast_to(shape, (2,)).astype(numpy.int64))
         except ValueError as e:
             raise ValueError(f"Expected a shape (n_y, n_x), instead got: {shape}") from e
 
         if extent is not None:
             try:
-                object.__setattr__(self, 'extent', numpy.broadcast_to(extent, (2,)).astype(numpy.float_))
+                object.__setattr__(self, 'extent', numpy.broadcast_to(extent, (2,)).astype(numpy.float64))
             except ValueError as e:
                 raise ValueError(f"Expected an extent (b, a), instead got: {extent}") from e
             object.__setattr__(self, 'sampling', self.extent / self.shape)
         elif sampling is not None:
             try:
-                object.__setattr__(self, 'sampling', numpy.broadcast_to(sampling, (2,)).astype(numpy.float_))
+                object.__setattr__(self, 'sampling', numpy.broadcast_to(sampling, (2,)).astype(numpy.float64))
             except ValueError as e:
                 raise ValueError(f"Expected a sampling (s_y, s_x), instead got: {sampling}") from e
             object.__setattr__(self, 'extent', self.sampling * self.shape)
         else:
             raise ValueError("Either 'extent' or 'sampling' must be specified")
 
-    def real_grid(self) -> t.Tuple[NDArray[numpy.float_], NDArray[numpy.float_]]:
+    def real_grid(self) -> t.Tuple[NDArray[numpy.float64], NDArray[numpy.float64]]:
         """Return the realspace sampling grid `(yy, xx)`. Top left corner is `(0, 0)`"""
         ys = numpy.linspace(0., self.extent[0], self.shape[0], endpoint=False)
         xs = numpy.linspace(0., self.extent[1], self.shape[1], endpoint=False)
         return tuple(numpy.meshgrid(ys, xs, indexing='ij'))  # type: ignore
 
-    def recip_grid(self, centered: bool = False) -> t.Tuple[NDArray[numpy.float_], NDArray[numpy.float_]]:
+    def recip_grid(self, centered: bool = False) -> t.Tuple[NDArray[numpy.float64], NDArray[numpy.float64]]:
         """
         Return the reciprocal space sampling grid `(kyy, kxx)`.
 

@@ -20,7 +20,7 @@ classifiers = [
 
 requires-python = ">=3.8"
 dependencies = [
-    "numpy>=1.20,<1.29"  # tested on 1.26
+    "numpy>=1.20,<2.3"  # tested on 1.26, 2.0
 ]
 
 [project.optional-dependencies]
