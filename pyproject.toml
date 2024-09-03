@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "eutils"
-version = "0.1"
+version = "0.2"
 authors = [
   {name = "Colin Gilgenbach", email = "hexane@mit.edu"}
 ]
@@ -20,10 +20,14 @@ classifiers = [
 
 requires-python = ">=3.8"
 dependencies = [
-    "numpy>=1.20,<2.3"  # tested on 1.26, 2.0
+    "numpy>=1.20,<2.3",  # tested on 1.26, 2.0
+    "click>=8.1.0"
 ]
 
 [project.optional-dependencies]
 dev = [
     "pytest>=6.2.4",
 ]
+
+[project.scripts]
+eutils = "eutils.main:main"
